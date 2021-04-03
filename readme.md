@@ -3,12 +3,12 @@ Image resizing API
 
 To run either do:
 
-npm run start
+>npm run start
 
 for development mode
 or
 
-npm run build
-node dist/. 
+>npm run test
+>node dist/. 
 
 for production mode
