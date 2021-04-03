@@ -8,7 +8,7 @@ To run either do:
 for development mode
 or
 
->npm run test
+>npm run test\n
 >node dist/. 
 
 for production mode
