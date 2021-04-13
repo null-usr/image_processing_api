@@ -50,10 +50,10 @@ var img_5 = require("../../util/img");
 //not exactly how to make the path tests universal...
 describe('Test Image Processing Helper Results', function () {
     it('finds the fullsize test image path', function () {
-        expect(img_4.fullsizePath('test.jpg')).toBe(path_1.default.join(process_1.default.cwd(), 'assets', "full", 'test.jpg'));
+        expect(img_4.fullsizePath('test.jpg')).toBe(path_1.default.join(process_1.default.cwd(), 'assets', 'full', 'test.jpg'));
     });
     it('finds the thumbnail test image path', function () {
-        expect(img_5.thumbnailPath('test.jpg', 100, 100)).toBe(path_1.default.join(process_1.default.cwd(), 'assets', "thumb", 'test_100x100.jpg'));
+        expect(img_5.thumbnailPath('test.jpg', 100, 100)).toBe(path_1.default.join(process_1.default.cwd(), 'assets', 'thumb', 'test_100x100.jpg'));
     });
     it('finds the thumbnail image in the file system', function () {
         expect(img_2.checkFSForThumbImage('test.jpg', 200, 200)).toBe(true);
@@ -66,41 +66,44 @@ describe('Test Image Processing Results', function () {
     //delete resized images
     afterAll(function () {
         try {
-            fs_1.default.unlinkSync(img_5.thumbnailPath('test.jpg', 100, 100));
+            fs_1.default.rmSync(img_5.thumbnailPath('test.jpg', width, height));
         }
         catch (err) {
-            console.error(err);
+            console.error("" + err);
         }
     });
     //.toBeResolved() doesn't seem to be available
-    it('loads the test image', function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var test_img;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        test_img = img_3.loadImage(img_4.fullsizePath('test.jpg'));
-                        return [4 /*yield*/, test_img.metadata().then(function (metadata) {
-                                expect(metadata).toBeTruthy();
-                            })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+    it('loads the fullsize test image', function (done) { return __awaiter(void 0, void 0, void 0, function () {
+        var test_img;
+        return __generator(this, function (_a) {
+            test_img = img_3.loadImage(img_4.fullsizePath('test.jpg'));
+            test_img.metadata().then(function (metadata) {
+                expect(metadata).toBeTruthy();
+                done();
             });
+            return [2 /*return*/];
         });
-    });
-    it('creates a 100x100 image', function () {
-        img_1.resizeImage('test.jpg', 100, 100).then(function (outputInfo) {
-            var result = outputInfo.width == width && outputInfo.height == height;
-            expect(result).toBe(true);
+    }); });
+    it('creates a 100x100 image', function (done) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            img_1.resizeImage('test.jpg', width, height).then(function (outputInfo) {
+                var result = outputInfo.width == width && outputInfo.height == height;
+                expect(result).toBe(true);
+                done();
+            });
+            return [2 /*return*/];
         });
-    });
-    it('finds loads the thumbnail image', function () {
-        var test_img = img_3.loadImage(img_5.thumbnailPath('test.jpg', width, height));
-        test_img.metadata().then(function (metadata) {
-            var result = metadata.width == width && metadata.height == height;
-            expect(result).toBe(true);
+    }); });
+    it('finds and loads the thumbnail image', function (done) { return __awaiter(void 0, void 0, void 0, function () {
+        var test_img;
+        return __generator(this, function (_a) {
+            test_img = img_3.loadImage(img_5.thumbnailPath('test.jpg', width, height));
+            test_img.metadata().then(function (metadata) {
+                var result = metadata.width == width && metadata.height == height;
+                expect(result).toBe(true);
+                done();
+            });
+            return [2 /*return*/];
         });
-    });
+    }); });
 });

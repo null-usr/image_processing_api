@@ -31,6 +31,7 @@ images.get('/', function (req, res) {
             if (filename_1 === undefined || filename_1 === '') {
                 throw 'Filename is undefined!';
             }
+            //if no file extention is provided, assume jpg
             var ext = filename_1.split('.');
             if (ext.length == 1) {
                 filename_1 = filename_1.concat('.jpg');

@@ -13,13 +13,13 @@ import { thumbnailPath } from '../../util/img';
 describe('Test Image Processing Helper Results', () => {
     it('finds the fullsize test image path', () => {
         expect(fullsizePath('test.jpg')).toBe(
-            path.join(process.cwd(), 'assets', "full", 'test.jpg')
+            path.join(process.cwd(), 'assets', 'full', 'test.jpg')
         );
     });
 
     it('finds the thumbnail test image path', () => {
         expect(thumbnailPath('test.jpg', 100, 100)).toBe(
-            path.join(process.cwd(), 'assets', "thumb", 'test_100x100.jpg')
+            path.join(process.cwd(), 'assets', 'thumb', 'test_100x100.jpg')
         );
     });
 
@@ -36,34 +36,37 @@ describe('Test Image Processing Results', () => {
     //delete resized images
     afterAll(() => {
         try {
-            fs.unlinkSync(thumbnailPath('test.jpg', 100, 100));
+            fs.rmSync(thumbnailPath('test.jpg', width, height));
         } catch (err) {
-            console.error(err);
+            console.error(`${err}`);
         }
     });
 
     //.toBeResolved() doesn't seem to be available
-    it('loads the test image', async function () {
+    it('loads the fullsize test image', async (done) => {
         const test_img = loadImage(fullsizePath('test.jpg'));
-        await test_img.metadata().then((metadata) => {
+        test_img.metadata().then((metadata) => {
             expect(metadata).toBeTruthy();
+            done();
         });
     });
 
-    it('creates a 100x100 image', () => {
-        resizeImage('test.jpg', 100, 100).then((outputInfo) => {
+    it('creates a 100x100 image', async (done) => {
+        resizeImage('test.jpg', width, height).then((outputInfo) => {
             const result: boolean =
                 outputInfo.width == width && outputInfo.height == height;
             expect(result).toBe(true);
+            done();
         });
     });
 
-    it('finds loads the thumbnail image', () => {
+    it('finds and loads the thumbnail image', async (done) => {
         const test_img = loadImage(thumbnailPath('test.jpg', width, height));
         test_img.metadata().then((metadata) => {
             const result: boolean =
                 metadata.width == width && metadata.height == height;
             expect(result).toBe(true);
+            done();
         });
     });
 });
