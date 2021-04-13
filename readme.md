@@ -24,6 +24,6 @@ or
 for production mode
 
 ## To-Do
--[ ] File Uploading
--[ ] Rename API
--[ ] Frontend
+- [ ] File Uploading
+- [ ] Rename API
+- [ ] Frontend
